@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MedicineService {
@@ -13,32 +14,72 @@ public class MedicineService {
     @Autowired
     private MedicineRepository medicineRepository;
 
-    // GET ALL
-    public List<MedicineOrder> getAllOrders() {
+    // ================= GET ALL =================
 
+    public List<MedicineOrder> getAllOrders() {
         return medicineRepository.getAllOrders();
     }
 
-    // ADD
-    public void addOrder(MedicineOrder order) {
+    // ================= GET BY ID =================
 
-        List<MedicineOrder> orders =
-                medicineRepository.getAllOrders();
-
-        orders.add(order);
-
-        medicineRepository.saveAllOrders(orders);
+    public MedicineOrder getOrderById(String orderId) {
+        return medicineRepository.getOrderById(orderId);
     }
 
-    // DELETE
+    // ================= GET BY PATIENT =================
+
+    public List<MedicineOrder> getOrdersByPatientId(String patientId) {
+        return medicineRepository.getOrdersByPatientId(patientId);
+    }
+
+    // ================= GET BY DOCTOR =================
+
+    public List<MedicineOrder> getOrdersByDoctorId(String doctorId) {
+        return medicineRepository.getOrdersByDoctorId(doctorId);
+    }
+
+    // ================= ADD =================
+
+    public void addOrder(MedicineOrder order) {
+
+        if (order.getOrderId() == null ||
+                order.getOrderId().isEmpty()) {
+
+            order.setOrderId(
+                    "MED-" +
+                            UUID.randomUUID()
+                                    .toString()
+                                    .substring(0, 6)
+                                    .toUpperCase()
+            );
+        }
+
+        medicineRepository.addOrder(order);
+
+        System.out.println(
+                "MEDICINE ORDER ADDED: "
+                        + order.getOrderId());
+    }
+
+    // ================= UPDATE =================
+
+    public void updateOrder(MedicineOrder updatedOrder) {
+
+        medicineRepository.updateOrder(updatedOrder);
+
+        System.out.println(
+                "MEDICINE ORDER UPDATED: "
+                        + updatedOrder.getOrderId());
+    }
+
+    // ================= DELETE =================
+
     public void deleteOrder(String orderId) {
 
-        List<MedicineOrder> orders =
-                medicineRepository.getAllOrders();
+        medicineRepository.deleteOrder(orderId);
 
-        orders.removeIf(order ->
-                order.getOrderId().equals(orderId));
-
-        medicineRepository.saveAllOrders(orders);
+        System.out.println(
+                "MEDICINE ORDER DELETED: "
+                        + orderId);
     }
 }
