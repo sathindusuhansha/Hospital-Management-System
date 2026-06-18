@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MediCore | Bill & Payment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --text: #081427;
+            --muted: #64748b;
+            --border: #dbe8ee;
+            --shadow: 0 18px 45px rgba(15,23,42,0.09);
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef6f8, #f8fbfd);
+            color: var(--text);
+        }
+
+        .app-shell { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 285px;
+            min-height: 100vh;
+            position: fixed;
+            padding: 24px 18px;
+            background: linear-gradient(180deg, #061724, #0b3043 55%, #0f4c5c);
+            color: white;
+        }
+
+        .brand, .mini-profile, .menu a, .logout {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            gap: 14px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2dd4bf, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .brand h2 { font-size: 25px; margin-bottom: 4px; }
+        .brand span { color: #bae6fd; font-size: 12px; }
+
+        .sidebar-title {
+            margin: 30px 0 12px;
+            padding-left: 10px;
+            color: #9bd6e6;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .menu a, .logout {
+            gap: 13px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            color: #e3f8fb;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .menu a:hover, .menu a.active, .logout:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateX(5px);
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 24px;
+        }
+
+        .mini-profile {
+            gap: 12px;
+            padding: 14px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.10);
+            margin-bottom: 12px;
+        }
+
+        .mini-avatar {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: rgba(204,251,241,0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-profile span {
+            display: block;
+            font-size: 12px;
+            color: #bae6fd;
+            margin-top: 3px;
+        }
+
+        .main-content {
+            width: calc(100% - 285px);
+            margin-left: 285px;
+            padding: 34px;
+        }
+
+        .topbar, .hero, .panel-header, .bill-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar { margin-bottom: 26px; }
+
+        .page-label {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .topbar h1 {
+            font-size: 38px;
+            margin: 10px 0 8px;
+            color: #071225;
+        }
+
+        .topbar p { color: var(--muted); font-size: 15px; }
+
+        .profile-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 13px 16px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(15,118,110,0.97), rgba(8,47,73,0.98));
+            border-radius: 30px;
+            padding: 32px;
+            color: white;
+            box-shadow: var(--shadow);
+            margin-bottom: 26px;
+        }
+
+        .hero h2 { font-size: 30px; margin-bottom: 12px; }
+
+        .hero p {
+            max-width: 800px;
+            line-height: 1.7;
+            color: #dff7fb;
+        }
+
+        .hero-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 14px 35px rgba(15,23,42,0.07);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .blue { background: #dbeafe; color: #2563eb; }
+        .green { background: #dcfce7; color: #16a34a; }
+        .orange { background: #ffedd5; color: #ea580c; }
+        .purple { background: #ede9fe; color: #7c3aed; }
+
+        .stat-card h3 { font-size: 26px; color: #0f172a; }
+        .stat-card p { color: var(--muted); font-size: 14px; margin-top: 3px; }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header {
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .panel-header h2 {
+            color: #071225;
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .search-box {
+            width: 330px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .search-box i { color: var(--primary); }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .billing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .bill-card {
+            border: 1px solid #edf2f7;
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 24px;
+            transition: 0.25s ease;
+        }
+
+        .bill-card:hover {
+            background: white;
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(15,23,42,0.08);
+        }
+
+        .bill-top {
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .bill-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .bill-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .bill-info h3 {
+            color: #071225;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .bill-info span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status-badge {
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .status-paid { background: #dcfce7; color: #15803d; }
+        .status-pending { background: #fef3c7; color: #b45309; }
+        .status-cancelled { background: #fee2e2; color: #dc2626; }
+
+        .bill-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .detail-box {
+            background: white;
+            border: 1px solid #edf2f7;
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .detail-box label {
+            display: block;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-box span {
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .description-box {
+            margin-top: 18px;
+            background: white;
+            border: 1px solid #edf2f7;
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .description-box label {
+            display: block;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .description-box p {
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .amount-box {
+            margin-top: 18px;
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        .amount-box label {
+            color: var(--muted);
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .amount-box strong {
+            color: #071225;
+            font-size: 26px;
+        }
+
+        .payment-form {
+            margin-top: 18px;
+        }
+
+        .payment-method {
+            margin-bottom: 12px;
+        }
+
+        .payment-method label {
+            display: block;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .payment-method select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .payment-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #0f766e, #0f4c5c);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .disabled-btn {
+            margin-top: 18px;
+            background: #e2e8f0;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+            border: 1px dashed var(--border);
+            border-radius: 24px;
+            background: #f8fafc;
+        }
+
+        .empty-state i {
+            font-size: 46px;
+            color: var(--primary);
+            margin-bottom: 14px;
+        }
+
+        .empty-state h3 {
+            color: #071225;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p { color: var(--muted); }
+
+        @media (max-width: 1200px) {
+            .stats-grid,
+            .billing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar,
+            .hero,
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div>
+                <h2>MediCore</h2>
+                <span>Patient Portal</span>
+            </div>
+        </div>
+
+        <div class="sidebar-title">Patient Menu</div>
+
+        <nav class="menu">
+            <a href="/patient/dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/patient/medical-records">
+                <i class="fa-solid fa-file-medical"></i>
+                <span>Medical Records</span>
+            </a>
+
+            <a href="/patient/appointments">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Appointments</span>
+            </a>
+
+            <a href="/patient/medicine">
+                <i class="fa-solid fa-pills"></i>
+                <span>Medicine</span>
+            </a>
+
+            <a class="active" href="/patient/billing">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Bill & Payment</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="mini-profile">
+                <div class="mini-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                    <strong th:text="${patientName} ?: 'Patient'">Patient</strong>
+                    <span>Logged in</span>
+                </div>
+            </div>
+
+            <a class="logout" href="/logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <span class="page-label">Bill & Payment</span>
+                <h1>My Bills</h1>
+                <p>View bills generated by the receptionist and complete your payments.</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-icon">
+                    <i class="fa-solid fa-user-injured"></i>
+                </div>
+                <div>
+                    <strong th:text="${patientName} ?: 'Patient Name'">Patient Name</strong><br>
+                    <span th:text="${patientEmail} ?: 'Patient Portal'">Patient Portal</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <h2>Hospital Billing Center</h2>
+                <p>
+                    Review your hospital charges, payment status, payment method, and complete your bills safely.
+                    Once you pay, the bill status will be updated to Paid.
+                </p>
+            </div>
+
+            <div class="hero-icon">
+                <i class="fa-solid fa-credit-card"></i>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div>
+                    <h3 th:text="${bills != null ? #lists.size(bills) : 0}">0</h3>
+                    <p>Total Bills</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <h3>Paid</h3>
+                    <p>Completed Payments</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <h3>Pending</h3>
+                    <p>Awaiting Payment</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
+                <div>
+                    <h3>Secure</h3>
+                    <p>Payment Portal</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Billing Records</h2>
+                    <p>Only bills generated for your patient account will appear here.</p>
+                </div>
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="searchInput" type="text" placeholder="Search bills..." onkeyup="searchBills()">
+                </div>
+            </div>
+
+            <div class="billing-grid" th:if="${bills != null && !#lists.isEmpty(bills)}">
+
+                <div class="bill-card" th:each="bill : ${bills}">
+
+                    <div class="bill-top">
+                        <div class="bill-info">
+                            <div class="bill-avatar">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+
+                            <div>
+                                <h3 th:text="${bill.serviceName} ?: 'Hospital Bill'">Hospital Bill</h3>
+                                <span>
+                                    Bill ID:
+                                    <strong th:text="${bill.billId}">BILL-001</strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <span class="status-badge"
+                              th:text="${bill.paymentStatus} ?: 'Pending'"
+                              th:classappend="${bill.paymentStatus == 'Paid'} ? ' status-paid' :
+                                              (${bill.paymentStatus == 'Cancelled'} ? ' status-cancelled' : ' status-pending')">
+                            Pending
+                        </span>
+                    </div>
+
+                    <div class="bill-details">
+                        <div class="detail-box">
+                            <label>Bill Date</label>
+                            <span th:text="${bill.billDate} ?: 'Not available'">2026-06-01</span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Payment Date</label>
+                            <span th:text="${bill.paymentDate != null && !bill.paymentDate.isEmpty() ? bill.paymentDate : 'Not Paid'}">
+                                Not Paid
+                            </span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Service Name</label>
+                            <span th:text="${bill.serviceName} ?: 'Hospital Service'">Consultation</span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Payment Method</label>
+                            <span th:text="${bill.paymentMethod} ?: 'Not Paid'">Not Paid</span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Consultation Fee</label>
+                            <span>Rs. <span th:text="${#numbers.formatDecimal(bill.consultationFee, 1, 2)}">0.00</span></span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Medicine Fee</label>
+                            <span>Rs. <span th:text="${#numbers.formatDecimal(bill.medicineFee, 1, 2)}">0.00</span></span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Room Fee</label>
+                            <span>Rs. <span th:text="${#numbers.formatDecimal(bill.roomFee, 1, 2)}">0.00</span></span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Lab Fee</label>
+                            <span>Rs. <span th:text="${#numbers.formatDecimal(bill.labFee, 1, 2)}">0.00</span></span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Other Fee</label>
+                            <span>Rs. <span th:text="${#numbers.formatDecimal(bill.otherFee, 1, 2)}">0.00</span></span>
+                        </div>
+
+                        <div class="detail-box">
+                            <label>Created By</label>
+                            <span th:text="${bill.createdBy} ?: 'Receptionist'">Receptionist</span>
+                        </div>
+                    </div>
+
+                    <div class="description-box">
+                        <label>Description</label>
+                        <p th:text="${bill.description} ?: 'No description provided.'">
+                            No description provided.
+                        </p>
+                    </div>
+
+                    <div class="amount-box">
+                        <label>Total Amount</label>
+                        <strong>
+                            Rs.
+                            <span th:text="${#numbers.formatDecimal(bill.totalAmount, 1, 2)}">0.00</span>
+                        </strong>
+                    </div>
+
+                    <form class="payment-form"
+                          th:if="${bill.paymentStatus == null || bill.paymentStatus != 'Paid'}"
+                          th:action="@{'/patient/billing/pay/' + ${bill.billId}}"
+                          method="post">
+
+                        <div class="payment-method">
+                            <label>Choose Payment Method</label>
+                            <select name="paymentMethod" required>
+                                <option value="Online">Online</option>
+                                <option value="Card">Card</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                        </div>
+
+                        <button type="submit"
+                                class="payment-btn"
+                                onclick="return confirm('Confirm payment for this bill?');">
+                            <i class="fa-solid fa-credit-card"></i>
+                            Pay Now
+                        </button>
+                    </form>
+
+                    <button class="payment-btn disabled-btn"
+                            th:if="${bill.paymentStatus == 'Paid'}"
+                            type="button">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Payment Completed
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="empty-state" th:if="${bills == null || #lists.isEmpty(bills)}">
+                <i class="fa-solid fa-file-invoice"></i>
+                <h3>No Bills Found</h3>
+                <p>Your hospital bills will appear here after the receptionist generates them.</p>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    function searchBills() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const cards = document.querySelectorAll(".bill-card");
+
+        cards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>

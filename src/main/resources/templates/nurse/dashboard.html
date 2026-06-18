@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MediCore | Nurse Dashboard</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --text: #081427;
+            --muted: #64748b;
+            --border: #dbe8ee;
+            --shadow: 0 18px 45px rgba(15,23,42,0.09);
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef6f8, #f8fbfd);
+            color: var(--text);
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 285px;
+            min-height: 100vh;
+            position: fixed;
+            padding: 24px 18px;
+            background: linear-gradient(180deg, #061724, #0b3043 55%, #0f4c5c);
+            color: white;
+            box-shadow: 12px 0 40px rgba(2,8,23,0.18);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2dd4bf, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .brand h2 {
+            font-size: 25px;
+            margin-bottom: 4px;
+        }
+
+        .brand span {
+            color: #bae6fd;
+            font-size: 12px;
+        }
+
+        .sidebar-title {
+            margin: 30px 0 12px;
+            padding-left: 10px;
+            color: #9bd6e6;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .menu a,
+        .logout {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            color: #e3f8fb;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active,
+        .logout:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateX(5px);
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 24px;
+        }
+
+        .mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.10);
+            margin-bottom: 12px;
+        }
+
+        .mini-avatar {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: rgba(204,251,241,0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-profile span {
+            display: block;
+            font-size: 12px;
+            color: #bae6fd;
+            margin-top: 3px;
+        }
+
+        .main-content {
+            width: calc(100% - 285px);
+            margin-left: 285px;
+            padding: 34px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .page-label {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .topbar h1 {
+            font-size: 38px;
+            margin: 10px 0 8px;
+            color: #071225;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 13px 16px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-card span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(15,118,110,0.97), rgba(8,47,73,0.98));
+            border-radius: 30px;
+            padding: 32px;
+            color: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 780px;
+            line-height: 1.7;
+            color: #dff7fb;
+        }
+
+        .hero-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 14px 35px rgba(15,23,42,0.07);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .blue { background: #dbeafe; color: #2563eb; }
+        .green { background: #dcfce7; color: #16a34a; }
+        .orange { background: #ffedd5; color: #ea580c; }
+        .purple { background: #ede9fe; color: #7c3aed; }
+
+        .stat-card h3 {
+            font-size: 26px;
+            color: #0f172a;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 3px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .panel-header h2 {
+            color: #071225;
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .view-btn {
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .activity-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 20px;
+            background: #f8fafc;
+            border: 1px solid #edf2f7;
+        }
+
+        .activity-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-item h4 {
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .activity-item p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            display: grid;
+            gap: 14px;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px;
+            border-radius: 22px;
+            background: #f8fafc;
+            border: 1px solid #edf2f7;
+            text-decoration: none;
+            color: var(--text);
+            transition: 0.25s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 12px 25px rgba(15,23,42,0.08);
+        }
+
+        .action-card i {
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-card strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #0f172a;
+        }
+
+        .action-card span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar,
+            .hero,
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div>
+                <h2>MediCore</h2>
+                <span>Nurse Portal</span>
+            </div>
+        </div>
+
+        <div class="sidebar-title">Nurse Menu</div>
+
+        <nav class="menu">
+            <a class="active" href="/nurse/dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/nurse/wardroom">
+                <i class="fa-solid fa-bed-pulse"></i>
+                <span>Ward Room</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="mini-profile">
+                <div class="mini-avatar">
+                    <i class="fa-solid fa-user-nurse"></i>
+                </div>
+
+                <div>
+                    <strong th:text="${nurseName} ?: 'Nurse'">Nurse</strong>
+                    <span>Ward Department</span>
+                </div>
+            </div>
+
+            <a class="logout" href="/logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <span class="page-label">Nurse Dashboard</span>
+                <h1>
+                    Welcome,
+                    <span th:text="${nurseName} ?: 'Nurse'">Nurse</span>
+                </h1>
+                <p>Monitor patient admissions, ward rooms, discharges, and bed availability.</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-icon">
+                    <i class="fa-solid fa-user-nurse"></i>
+                </div>
+
+                <div>
+                    <strong th:text="${nurseName} ?: 'Nurse Name'">Nurse Name</strong><br>
+                    <span th:text="${username} ?: 'Active Session'">Active Session</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <h2>Ward Management Center</h2>
+                <p>
+                    This dashboard helps nurses manage admitted patients, room assignments,
+                    bed occupancy, and patient discharge workflow inside the hospital system.
+                </p>
+            </div>
+
+            <div class="hero-icon">
+                <i class="fa-solid fa-hospital-user"></i>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-bed"></i>
+                </div>
+                <div>
+                    <h3 th:text="${totalWardRecords}">0</h3>
+                    <p>Total Ward Records</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                    <h3 th:text="${activeAdmissions}">0</h3>
+                    <p>Active Admissions</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div>
+                    <h3 th:text="${dischargedCount}">0</h3>
+                    <p>Discharged Patients</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-door-open"></i>
+                </div>
+                <div>
+                    <h3 th:text="${availableBeds}">0</h3>
+                    <p>Available Beds</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Recent Ward Activity</h2>
+                        <p>Latest ward room records and patient admission details.</p>
+                    </div>
+
+                    <a class="view-btn" href="/nurse/wardroom">
+                        Manage Wards
+                    </a>
+                </div>
+
+                <div class="activity-list" th:if="${recentWardRooms != null && !#lists.isEmpty(recentWardRooms)}">
+                    <div class="activity-item" th:each="ward : ${recentWardRooms}">
+                        <div class="activity-icon">
+                            <i class="fa-solid fa-bed-pulse"></i>
+                        </div>
+
+                        <div>
+                            <h4>
+                                <span th:text="${ward.patientName} ?: 'Patient'">Patient</span>
+                                -
+                                <span th:text="${ward.status} ?: 'Admitted'">Admitted</span>
+                            </h4>
+
+                            <p>
+                                Room
+                                <span th:text="${ward.roomNumber} ?: 'N/A'">N/A</span>,
+                                Bed
+                                <span th:text="${ward.bedNumber} ?: 'N/A'">N/A</span>,
+                                Ward:
+                                <span th:text="${ward.wardName} ?: 'General Ward'">General Ward</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-list" th:if="${recentWardRooms == null || #lists.isEmpty(recentWardRooms)}">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+
+                        <div>
+                            <h4>No ward records yet</h4>
+                            <p>Admitted patient records will appear here after you add ward room data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Quick Actions</h2>
+                        <p>Common nurse tasks.</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <a class="action-card" href="/nurse/wardroom">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <div>
+                            <strong>Admit Patient</strong>
+                            <span>Add a patient to a ward room</span>
+                        </div>
+                    </a>
+
+                    <a class="action-card" href="/nurse/wardroom">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <div>
+                            <strong>Update Assignment</strong>
+                            <span>Edit room, bed, or ward details</span>
+                        </div>
+                    </a>
+
+                    <a class="action-card" href="/nurse/wardroom">
+                        <i class="fa-solid fa-user-check"></i>
+                        <div>
+                            <strong>Discharge Patient</strong>
+                            <span>Mark admitted patient as discharged</span>
+                        </div>
+                    </a>
+
+                    <a class="action-card" href="/nurse/wardroom">
+                        <i class="fa-solid fa-list-check"></i>
+                        <div>
+                            <strong>View Occupancy</strong>
+                            <span>Check active ward room records</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

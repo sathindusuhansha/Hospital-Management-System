@@ -1,0 +1,18 @@
+[ {
+  "billId" : "BILL-e04540",
+  "patientId" : "PAT-de9f8a",
+  "patientName" : "rasandu vihansha",
+  "billDate" : "2026-06-01",
+  "serviceName" : "consultation",
+  "description" : "uuutuuttu",
+  "consultationFee" : 3000.0,
+  "medicineFee" : 0.0,
+  "roomFee" : 0.0,
+  "labFee" : 0.0,
+  "otherFee" : 0.0,
+  "totalAmount" : 3000.0,
+  "paymentStatus" : "Pending",
+  "paymentMethod" : "Cash",
+  "paymentDate" : "2026-06-17",
+  "createdBy" : "prabha"
+} ]

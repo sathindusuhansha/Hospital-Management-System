@@ -1,0 +1,17 @@
+[ {
+  "wardId" : "WARD-FEC93F",
+  "patientId" : "PAT-de9f8a",
+  "patientName" : "rasandu vihansha",
+  "nurseId" : "STF-a23f0a",
+  "nurseName" : "oneli",
+  "wardName" : "emergency",
+  "wardType" : "Emergency",
+  "roomNumber" : "234",
+  "bedNumber" : "a1",
+  "capacity" : 17,
+  "occupiedBeds" : 9,
+  "admissionDate" : "2026-06-10",
+  "dischargeDate" : "2026-06-01",
+  "status" : "Discharged",
+  "notes" : "hghgjguh"
+} ]

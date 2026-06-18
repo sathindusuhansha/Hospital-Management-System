@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MediCore | Receptionist Appointments</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --text: #081427;
+            --muted: #64748b;
+            --border: #dbe8ee;
+            --shadow: 0 18px 45px rgba(15,23,42,0.09);
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef6f8, #f8fbfd);
+            color: var(--text);
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 285px;
+            min-height: 100vh;
+            position: fixed;
+            padding: 24px 18px;
+            background: linear-gradient(180deg, #061724, #0b3043 55%, #0f4c5c);
+            color: white;
+            box-shadow: 12px 0 40px rgba(2, 8, 23, 0.18);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2dd4bf, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .brand h2 {
+            font-size: 25px;
+            margin-bottom: 4px;
+        }
+
+        .brand span {
+            color: #bae6fd;
+            font-size: 12px;
+        }
+
+        .sidebar-title {
+            margin: 30px 0 12px;
+            padding-left: 10px;
+            color: #9bd6e6;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .menu a,
+        .logout {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            color: #e3f8fb;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active,
+        .logout:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateX(5px);
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 24px;
+        }
+
+        .mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.10);
+            margin-bottom: 12px;
+        }
+
+        .mini-avatar {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: rgba(204,251,241,0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-profile span {
+            display: block;
+            font-size: 12px;
+            color: #bae6fd;
+            margin-top: 3px;
+        }
+
+        .main-content {
+            width: calc(100% - 285px);
+            margin-left: 285px;
+            padding: 34px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .page-label {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .topbar h1 {
+            font-size: 38px;
+            margin: 10px 0 8px;
+            color: #071225;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 13px 16px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-card span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(15,118,110,0.97), rgba(8,47,73,0.98));
+            border-radius: 30px;
+            padding: 32px;
+            color: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 780px;
+            line-height: 1.7;
+            color: #dff7fb;
+        }
+
+        .hero-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 14px 35px rgba(15,23,42,0.07);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .blue { background: #dbeafe; color: #2563eb; }
+        .green { background: #dcfce7; color: #16a34a; }
+        .orange { background: #ffedd5; color: #ea580c; }
+        .purple { background: #ede9fe; color: #7c3aed; }
+
+        .stat-card h3 {
+            font-size: 26px;
+            color: #0f172a;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 3px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            margin-bottom: 26px;
+        }
+
+        .panel-header {
+            margin-bottom: 22px;
+        }
+
+        .panel-header h2 {
+            color: #071225;
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #334155;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #dbe8ee;
+            background: #f8fafc;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .submit-btn,
+        .cancel-btn {
+            padding: 14px 22px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg,#0f766e,#0f4c5c);
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #e2e8f0;
+            color: #334155;
+            display: none;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .search-box {
+            width: 340px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .search-box i {
+            color: var(--primary);
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 22px;
+            border: 1px solid #edf2f7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: #f1f8fb;
+        }
+
+        th {
+            padding: 17px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #475569;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 18px 17px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #f8fcfd;
+        }
+
+        .id-pill {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .person-cell strong {
+            color: #0f172a;
+        }
+
+        .person-cell small {
+            color: var(--muted);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .status-confirmed { background: #dcfce7; color: #15803d; }
+        .status-pending { background: #fef3c7; color: #b45309; }
+        .status-cancelled { background: #fee2e2; color: #dc2626; }
+        .status-completed { background: #e0e7ff; color: #4338ca; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 9px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+        }
+
+        .edit { background: #dbeafe; color: #2563eb; }
+        .delete { background: #fee2e2; color: #dc2626; }
+        .cancel { background: #fef3c7; color: #b45309; }
+
+        .empty-state {
+            text-align: center;
+            padding: 55px !important;
+        }
+
+        .empty-state i {
+            font-size: 42px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .topbar,
+            .hero,
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div>
+                <h2>MediCore</h2>
+                <span>Receptionist Portal</span>
+            </div>
+        </div>
+
+        <div class="sidebar-title">Receptionist Menu</div>
+
+        <nav class="menu">
+            <a href="/receptionist/dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="active" href="/receptionist/appointments">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Appointments</span>
+            </a>
+
+            <a href="/receptionist/billing">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Billing</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="mini-profile">
+                <div class="mini-avatar">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+
+                <div>
+                    <strong th:text="${staffName} ?: 'Receptionist'">Receptionist</strong>
+                    <span>Front Desk</span>
+                </div>
+            </div>
+
+            <a class="logout" href="/logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <span class="page-label">Appointment Management</span>
+                <h1>Receptionist Appointments</h1>
+                <p>Create, view, edit, cancel, and delete patient appointments.</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+
+                <div>
+                    <strong th:text="${staffName} ?: 'Receptionist'">Receptionist</strong><br>
+                    <span>Receptionist Portal</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div>
+                <h2>Front Desk Appointment Center</h2>
+                <p>
+                    Receptionists can create appointments for patients, assign doctors,
+                    update appointment schedules, cancel appointments, and manage the
+                    hospital visit workflow professionally.
+                </p>
+            </div>
+
+            <div class="hero-icon">
+                <i class="fa-solid fa-calendar-plus"></i>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div>
+                    <h3 th:text="${appointments != null ? #lists.size(appointments) : 0}">0</h3>
+                    <p>Total Appointments</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-user-injured"></i>
+                </div>
+                <div>
+                    <h3 th:text="${patients != null ? #lists.size(patients) : 0}">0</h3>
+                    <p>Available Patients</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <div>
+                    <h3 th:text="${doctors != null ? #lists.size(doctors) : 0}">0</h3>
+                    <p>Available Doctors</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-hospital-user"></i>
+                </div>
+                <div>
+                    <h3>Front Desk</h3>
+                    <p>Appointment Access</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h2 id="formTitle">Create Appointment</h2>
+                <p id="formSubtitle">Select a patient, assign a doctor, and schedule the appointment.</p>
+            </div>
+
+            <form id="appointmentForm"
+                  th:action="@{/receptionist/appointments/add}"
+                  method="post"
+                  th:object="${appointment}">
+
+                <input type="hidden" id="appointmentId" name="appointmentId">
+                <input type="hidden" id="patientName" name="patientName">
+                <input type="hidden" id="doctorName" name="doctorName">
+                <input type="hidden" id="doctorCategory" name="doctorCategory">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Patient</label>
+                        <select id="patientId" name="patientId" onchange="setPatientName()" required>
+                            <option value="">Select Patient</option>
+
+                            <option th:each="patient : ${patients}"
+                                    th:value="${patient.patientId}"
+                                    th:text="${patient.fullName}"
+                                    th:data-name="${patient.fullName}">
+                                Patient Name
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Doctor</label>
+                        <select id="doctorId" name="doctorId" onchange="setDoctorDetails()" required>
+                            <option value="">Select Doctor</option>
+
+                            <option th:each="doctor : ${doctors}"
+                                    th:value="${doctor.id}"
+                                    th:text="${doctor.fullName + ' - ' + doctor.department}"
+                                    th:data-name="${doctor.fullName}"
+                                    th:data-category="${doctor.department}">
+                                Doctor Name
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Appointment Time</label>
+                        <input type="time" id="appointmentTime" name="appointmentTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status" name="status">
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Created By</label>
+                        <input type="text" value="RECEPTIONIST" disabled>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Reason</label>
+                        <textarea id="reason" name="reason" placeholder="Enter appointment reason..."></textarea>
+                    </div>
+
+                </div>
+
+                <div class="button-row">
+                    <button class="submit-btn" id="submitBtn" type="submit">
+                        <i class="fa-solid fa-plus"></i>
+                        Create Appointment
+                    </button>
+
+                    <button class="cancel-btn" id="cancelBtn" type="button" onclick="cancelEdit()">
+                        Cancel Edit
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="table-header">
+                <div class="panel-header" style="margin-bottom:0;">
+                    <h2>Appointment List</h2>
+                    <p>All appointment records saved in appointments.json.</p>
+                </div>
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="searchInput" type="text" placeholder="Search appointments..." onkeyup="searchAppointments()">
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="appointmentTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="appointment : ${appointments}">
+                        <td>
+                            <span class="id-pill" th:text="${appointment.appointmentId}">APT-001</span>
+                        </td>
+
+                        <td class="person-cell">
+                            <strong th:text="${appointment.patientName}">Patient Name</strong>
+                            <small th:text="${appointment.patientId}">PAT-001</small>
+                        </td>
+
+                        <td class="person-cell">
+                            <strong th:text="${appointment.doctorName}">Doctor Name</strong>
+                            <small th:text="${appointment.doctorId}">DOC-001</small>
+                        </td>
+
+                        <td th:text="${appointment.doctorCategory}">Category</td>
+                        <td th:text="${appointment.appointmentDate}">2026-06-01</td>
+                        <td th:text="${appointment.appointmentTime}">10:00</td>
+                        <td th:text="${appointment.reason}">Reason</td>
+
+                        <td>
+                            <span class="status-badge"
+                                  th:text="${appointment.status}"
+                                  th:classappend="${appointment.status == 'Confirmed'} ? ' status-confirmed' :
+                                                  (${appointment.status == 'Cancelled'} ? ' status-cancelled' :
+                                                  (${appointment.status == 'Completed'} ? ' status-completed' : ' status-pending'))">
+                                Pending
+                            </span>
+                        </td>
+
+                        <td th:text="${appointment.createdBy}">RECEPTIONIST</td>
+
+                        <td>
+                            <div class="action-buttons">
+                                <button type="button"
+                                        class="action-btn edit"
+                                        th:data-appointment-id="${appointment.appointmentId}"
+                                        th:data-patient-id="${appointment.patientId}"
+                                        th:data-patient-name="${appointment.patientName}"
+                                        th:data-doctor-id="${appointment.doctorId}"
+                                        th:data-doctor-name="${appointment.doctorName}"
+                                        th:data-doctor-category="${appointment.doctorCategory}"
+                                        th:data-appointment-date="${appointment.appointmentDate}"
+                                        th:data-appointment-time="${appointment.appointmentTime}"
+                                        th:data-reason="${appointment.reason}"
+                                        th:data-status="${appointment.status}"
+                                        onclick="editAppointment(this)">
+                                    Edit
+                                </button>
+
+                                <a class="action-btn cancel"
+                                   th:href="@{'/receptionist/appointments/cancel/' + ${appointment.appointmentId}}"
+                                   onclick="return confirm('Cancel this appointment?');">
+                                    Cancel
+                                </a>
+
+                                <a class="action-btn delete"
+                                   th:href="@{'/receptionist/appointments/delete/' + ${appointment.appointmentId}}"
+                                   onclick="return confirm('Delete this appointment permanently?');">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${appointments == null || #lists.isEmpty(appointments)}">
+                        <td colspan="10" class="empty-state">
+                            <i class="fa-solid fa-calendar-xmark"></i>
+                            <h3>No Appointments Found</h3>
+                            <p>Created appointments will appear here.</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    function setPatientName() {
+        const patientSelect = document.getElementById("patientId");
+        const selectedOption = patientSelect.options[patientSelect.selectedIndex];
+
+        document.getElementById("patientName").value =
+            selectedOption.dataset.name || "";
+    }
+
+    function setDoctorDetails() {
+        const doctorSelect = document.getElementById("doctorId");
+        const selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+
+        document.getElementById("doctorName").value =
+            selectedOption.dataset.name || "";
+
+        document.getElementById("doctorCategory").value =
+            selectedOption.dataset.category || "";
+    }
+
+    function editAppointment(button) {
+        document.getElementById("appointmentForm").action = "/receptionist/appointments/update";
+
+        document.getElementById("formTitle").innerText = "Edit Appointment";
+        document.getElementById("formSubtitle").innerText = "Update the selected appointment details.";
+        document.getElementById("submitBtn").innerHTML =
+            '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
+        document.getElementById("cancelBtn").style.display = "inline-block";
+
+        document.getElementById("appointmentId").value = button.dataset.appointmentId || "";
+        document.getElementById("patientId").value = button.dataset.patientId || "";
+        document.getElementById("patientName").value = button.dataset.patientName || "";
+        document.getElementById("doctorId").value = button.dataset.doctorId || "";
+        document.getElementById("doctorName").value = button.dataset.doctorName || "";
+        document.getElementById("doctorCategory").value = button.dataset.doctorCategory || "";
+        document.getElementById("appointmentDate").value = button.dataset.appointmentDate || "";
+        document.getElementById("appointmentTime").value = button.dataset.appointmentTime || "";
+        document.getElementById("reason").value = button.dataset.reason || "";
+        document.getElementById("status").value = button.dataset.status || "Confirmed";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function cancelEdit() {
+        document.getElementById("appointmentForm").action = "/receptionist/appointments/add";
+        document.getElementById("appointmentForm").reset();
+
+        document.getElementById("appointmentId").value = "";
+        document.getElementById("patientName").value = "";
+        document.getElementById("doctorName").value = "";
+        document.getElementById("doctorCategory").value = "";
+
+        document.getElementById("formTitle").innerText = "Create Appointment";
+        document.getElementById("formSubtitle").innerText =
+            "Select a patient, assign a doctor, and schedule the appointment.";
+        document.getElementById("submitBtn").innerHTML =
+            '<i class="fa-solid fa-plus"></i> Create Appointment';
+        document.getElementById("cancelBtn").style.display = "none";
+    }
+
+    function searchAppointments() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.querySelectorAll("#appointmentTable tbody tr");
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>

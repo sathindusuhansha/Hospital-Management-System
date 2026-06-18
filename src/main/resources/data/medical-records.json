@@ -1,0 +1,40 @@
+[ {
+  "recordId" : "MR-F22A74",
+  "patientId" : "PAT-3266d7",
+  "patientName" : "shenul rasinda",
+  "doctorId" : "STF-0b1a01",
+  "doctorName" : "iniudu",
+  "recordDate" : "2026-05-12",
+  "recordType" : "General",
+  "diagnosis" : "vfdgfdgfdgdffdgdg",
+  "prescription" : "fddfgfdgfd",
+  "notes" : "dfgfdgfdgfd",
+  "status" : "ACTIVE",
+  "summary" : "Medical Record Summary | Patient: shenul rasinda | Doctor: iniudu | Diagnosis: vfdgfdgfdgdffdgdg | Prescription: fddfgfdgfd"
+}, {
+  "recordId" : "MR-B2636F",
+  "patientId" : "PAT-de9f8a",
+  "patientName" : "rasandu vihansha",
+  "doctorId" : "STF-0b1a01",
+  "doctorName" : "iniudu",
+  "recordDate" : "2026-05-13",
+  "recordType" : "General",
+  "diagnosis" : "fdgfhgfhgfhfd",
+  "prescription" : "cxvcfgcgfd",
+  "notes" : "fgfdgfdgfdgfd",
+  "status" : "ACTIVE",
+  "summary" : "Medical Record Summary | Patient: rasandu vihansha | Doctor: iniudu | Diagnosis: fdgfhgfhgfhfd | Prescription: cxvcfgcgfd"
+}, {
+  "recordId" : "MR-4C6EEF",
+  "patientId" : "PAT-de9f8a",
+  "patientName" : "rasandu vihansha",
+  "doctorId" : "STF-0b1a01",
+  "doctorName" : "iniudu",
+  "recordDate" : "2026-05-14",
+  "recordType" : "General",
+  "diagnosis" : "dssdfdsfsds",
+  "prescription" : "dssdsfsd",
+  "notes" : "fsfdsfdsfdsf",
+  "status" : "ACTIVE",
+  "summary" : "Medical Record Summary | Patient: rasandu vihansha | Doctor: iniudu | Diagnosis: dssdfdsfsds | Prescription: dssdsfsd"
+} ]
