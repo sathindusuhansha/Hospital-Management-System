@@ -9,16 +9,20 @@ import org.springframework.context.ApplicationContext;
 public class HospitalManagementSystemApplication {
 
     public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(HospitalManagementSystemApplication.class, args);
-        
+
+        ApplicationContext context =
+                SpringApplication.run(HospitalManagementSystemApplication.class, args);
+
         // Run staff data migration on application startup
         try {
-            AdminRepository adminRepository = context.getBean(AdminRepository.class);
+            AdminRepository adminRepository =
+                    context.getBean(AdminRepository.class);
+
             adminRepository.migrateStaffToRoleFiles();
+
         } catch (Exception e) {
             System.err.println("WARNING: Could not run staff data migration");
-            e.printStackTrace();
+            System.err.println("Startup Error: " + e.getMessage());
         }
     }
-
 }
