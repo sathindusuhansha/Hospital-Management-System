@@ -1,0 +1,23 @@
+[ {
+  "id" : "STF-09ff50",
+  "fullName" : "sathindu suhansha malgahagamage",
+  "username" : "sathindu345",
+  "password" : "1234567890",
+  "email" : "sathindusuhansha@gmail.com",
+  "phone" : "0740619300",
+  "role" : "DOCTOR",
+  "department" : "phramacy",
+  "specialization" : "general medicine",
+  "qualification" : "phramacy diploma"
+}, {
+  "id" : "STF-0b1a01",
+  "fullName" : "iniudu",
+  "username" : "inidu",
+  "password" : "inidu",
+  "email" : "iniduravishamusic@gmail.com",
+  "phone" : "0761543556",
+  "role" : "DOCTOR",
+  "department" : "cardio",
+  "specialization" : "cardiology",
+  "qualification" : "cardiology"
+} ]

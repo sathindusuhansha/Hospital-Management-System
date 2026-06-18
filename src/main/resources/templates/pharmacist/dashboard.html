@@ -6,9 +6,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     :root {
       --primary: #0f766e;
@@ -430,7 +428,7 @@
       </div>
       <div>
         <h2>MediCore</h2>
-        <p>Hospital Management</p>
+        <p>Pharmacist Portal</p>
       </div>
     </div>
 
@@ -454,12 +452,12 @@
           <i class="fa-solid fa-user-doctor"></i>
         </div>
         <div>
-          <strong>Pharmacist</strong>
+          <strong th:text="${staffName} ?: 'Pharmacist'">Pharmacist</strong>
           <span>Medicine Dept.</span>
         </div>
       </div>
 
-      <a class="logout" href="#">
+      <a class="logout" th:href="@{/logout}">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         Logout
       </a>
@@ -471,7 +469,10 @@
     <header class="topbar">
       <div>
         <span class="page-label">Pharmacist Dashboard</span>
-        <h1>Welcome Back, Pharmacist</h1>
+        <h1>
+          Welcome Back,
+          <span th:text="${staffName} ?: 'Pharmacist'">Pharmacist</span>
+        </h1>
         <p>Monitor pharmacy operations, prescription orders, and medicine workflow.</p>
       </div>
 
@@ -480,7 +481,7 @@
           <i class="fa-solid fa-user-doctor"></i>
         </div>
         <div>
-          <strong>Pharmacist</strong>
+          <strong th:text="${staffName} ?: 'Pharmacist'">Pharmacist</strong>
           <span>Active Session</span>
         </div>
       </div>
@@ -490,9 +491,8 @@
       <div>
         <h2>Pharmacy Operations Center</h2>
         <p>
-          This dashboard helps pharmacists review doctor-issued prescriptions,
-          monitor active medicine orders, and support safe medicine distribution
-          for patients across the hospital.
+          Review doctor-issued prescriptions, monitor active medicine orders,
+          and support safe medicine distribution for patients across the hospital.
         </p>
       </div>
 
@@ -507,7 +507,7 @@
           <i class="fa-solid fa-file-prescription"></i>
         </div>
         <div>
-          <h3 th:text="${totalOrders}">24</h3>
+          <h3 th:text="${totalOrders} ?: 0">0</h3>
           <p>Total Orders</p>
         </div>
       </div>
@@ -607,19 +607,11 @@
             </div>
           </a>
 
-          <a class="action-card" href="#">
-            <i class="fa-solid fa-magnifying-glass"></i>
+          <a class="action-card" th:href="@{/pharmacist/dashboard}">
+            <i class="fa-solid fa-gauge-high"></i>
             <div>
-              <strong>Search Patient Medicine</strong>
-              <span>Find patient medicine records</span>
-            </div>
-          </a>
-
-          <a class="action-card" href="#">
-            <i class="fa-solid fa-circle-info"></i>
-            <div>
-              <strong>Medicine Guidelines</strong>
-              <span>Read pharmacy safety rules</span>
+              <strong>Dashboard</strong>
+              <span>Return to pharmacist dashboard</span>
             </div>
           </a>
         </div>
