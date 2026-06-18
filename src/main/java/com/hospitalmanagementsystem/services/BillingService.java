@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * BillingService handles billing business logic.
+ */
 @Service
 public class BillingService {
 

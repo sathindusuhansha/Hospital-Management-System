@@ -1,4 +1,5 @@
 package com.hospitalmanagementsystem.controllers;
+// Billing management functions for receptionist and patient billing workflows
 
 import com.hospitalmanagementsystem.models.Bill;
 import com.hospitalmanagementsystem.models.Patient;

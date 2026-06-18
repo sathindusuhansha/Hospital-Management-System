@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/receptionist")
+
 public class ReceptionistController {
 
     @Autowired

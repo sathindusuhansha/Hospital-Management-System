@@ -1,7 +1,19 @@
 package com.hospitalmanagementsystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+/**
 
+ * Bill model representing a patient bill.
+
+ *
+
+ * OOP Concepts:
+
+ * - Encapsulation
+
+ * - Data Abstraction
+
+ */
 public class Bill {
 
     private String billId;

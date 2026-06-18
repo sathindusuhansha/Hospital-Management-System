@@ -11,14 +11,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+/**
 
+ * BillingRepository manages
+
+ * reading and writing bill data
+
+ * from JSON storage.
+
+ */
 @Repository
 public class BillingRepository {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String FILE_PATH =
-            "src/main/resources/data/bills.json";
+            "/Users/dayanitharmarajahd/Documents/Hospital-Management-System (2)/Hospital-Management-System/src/main/resources/data/bills.json";
 
     public BillingRepository() {
         objectMapper.configure(
@@ -66,9 +74,9 @@ public class BillingRepository {
         try {
             File file = new File(FILE_PATH);
             File parent = file.getParentFile();
-if (parent != null && !parent.exists()) {
-    parent.mkdirs();
-}
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
 
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(file, bills);
