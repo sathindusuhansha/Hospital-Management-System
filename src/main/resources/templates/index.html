@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediCore | Hospital Management System</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -27,51 +29,70 @@
             overflow-x: hidden;
         }
 
-        /* Background */
         .bg-layer {
-            position: fixed; inset: 0; z-index: 0;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
             background:
                     radial-gradient(ellipse 80% 60% at 70% 20%, rgba(13,148,136,0.12) 0%, transparent 60%),
                     radial-gradient(ellipse 60% 80% at 10% 80%, rgba(212,168,83,0.07) 0%, transparent 50%),
                     var(--navy);
         }
+
         .grid-overlay {
-            position: fixed; inset: 0; z-index: 0;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
             background-image:
                     linear-gradient(rgba(13,148,136,0.05) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(13,148,136,0.05) 1px, transparent 1px);
             background-size: 60px 60px;
         }
 
-        /* Nav */
         nav {
-            position: relative; z-index: 10;
-            display: flex; align-items: center; justify-content: space-between;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 24px 64px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
             backdrop-filter: blur(10px);
             background: rgba(10,22,40,0.7);
         }
+
         .logo {
-            display: flex; align-items: center; gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
+
         .logo-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: var(--teal);
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 20px;
         }
+
         .logo-text {
             font-family: 'Playfair Display', serif;
             font-size: 22px;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
+
         .logo-text span { color: var(--teal-light); }
+
         .nav-links {
-            display: flex; align-items: center; gap: 36px;
+            display: flex;
+            align-items: center;
+            gap: 36px;
         }
+
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -80,68 +101,91 @@
             letter-spacing: 0.3px;
             transition: color 0.2s;
         }
+
         .nav-links a:hover { color: var(--white); }
-        .nav-actions { display: flex; gap: 12px; }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+
         .btn-outline {
             padding: 9px 22px;
             border: 1px solid rgba(13,148,136,0.5);
             border-radius: 8px;
             color: var(--teal-light);
             text-decoration: none;
-            font-size: 14px; font-weight: 500;
+            font-size: 14px;
+            font-weight: 500;
             transition: all 0.2s;
         }
+
         .btn-outline:hover {
             background: rgba(13,148,136,0.1);
             border-color: var(--teal-light);
         }
+
         .btn-primary {
             padding: 9px 22px;
             background: var(--teal);
             border-radius: 8px;
             color: var(--white);
             text-decoration: none;
-            font-size: 14px; font-weight: 600;
+            font-size: 14px;
+            font-weight: 600;
             transition: all 0.2s;
             border: 1px solid transparent;
         }
+
         .btn-primary:hover { background: var(--teal-light); }
 
-        /* Hero */
         .hero {
-            position: relative; z-index: 5;
-            display: flex; flex-direction: column; align-items: center;
+            position: relative;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             padding: 110px 64px 80px;
             animation: fadeUp 0.8s ease both;
         }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
         .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             background: rgba(13,148,136,0.12);
             border: 1px solid rgba(13,148,136,0.3);
             border-radius: 100px;
             padding: 6px 16px;
-            font-size: 12px; font-weight: 500;
+            font-size: 12px;
+            font-weight: 500;
             color: var(--teal-light);
-            letter-spacing: 1px; text-transform: uppercase;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             margin-bottom: 28px;
         }
+
         .hero-badge::before {
             content: '';
-            width: 6px; height: 6px;
+            width: 6px;
+            height: 6px;
             background: var(--teal-light);
             border-radius: 50%;
             box-shadow: 0 0 8px var(--teal-light);
             animation: pulse 2s infinite;
         }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
+
         .hero h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(42px, 6vw, 72px);
@@ -151,35 +195,39 @@
             max-width: 800px;
             margin-bottom: 24px;
         }
+
         .hero h1 em {
             font-style: normal;
             color: var(--teal-light);
         }
+
         .hero p {
             color: var(--text-muted);
-            font-size: 18px; font-weight: 300;
+            font-size: 18px;
+            font-weight: 300;
             max-width: 560px;
             line-height: 1.7;
             margin-bottom: 48px;
         }
+
         .hero-ctas {
-            display: flex; gap: 14px;
+            display: flex;
+            gap: 14px;
         }
-        .hero-ctas .btn-primary {
-            padding: 14px 32px;
-            font-size: 15px;
-            border-radius: 10px;
-        }
+
+        .hero-ctas .btn-primary,
         .hero-ctas .btn-outline {
             padding: 14px 32px;
             font-size: 15px;
             border-radius: 10px;
         }
 
-        /* Stats strip */
         .stats-strip {
-            position: relative; z-index: 5;
-            display: flex; justify-content: center; gap: 0;
+            position: relative;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            gap: 0;
             margin: 0 64px;
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 16px;
@@ -188,49 +236,65 @@
             backdrop-filter: blur(12px);
             animation: fadeUp 0.8s 0.2s ease both;
         }
+
         .stat-item {
             flex: 1;
             padding: 32px 24px;
             text-align: center;
             border-right: 1px solid rgba(255,255,255,0.07);
         }
+
         .stat-item:last-child { border-right: none; }
+
         .stat-num {
             font-family: 'Playfair Display', serif;
-            font-size: 36px; font-weight: 700;
+            font-size: 36px;
+            font-weight: 700;
             color: var(--teal-light);
         }
+
         .stat-label {
-            font-size: 13px; color: var(--text-muted);
-            margin-top: 4px; font-weight: 400;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 400;
         }
 
-        /* Roles section */
         .roles-section {
-            position: relative; z-index: 5;
+            position: relative;
+            z-index: 5;
             padding: 80px 64px;
             animation: fadeUp 0.8s 0.3s ease both;
         }
+
         .section-header {
-            text-align: center; margin-bottom: 48px;
+            text-align: center;
+            margin-bottom: 48px;
         }
+
         .section-label {
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 2px; text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             color: var(--gold);
             margin-bottom: 12px;
         }
+
         .section-header h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 36px; font-weight: 600;
+            font-size: 36px;
+            font-weight: 600;
         }
+
         .roles-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 16px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
+
         .role-card {
             background: rgba(17,34,64,0.7);
             border: 1px solid rgba(255,255,255,0.07);
@@ -243,68 +307,154 @@
             transition: all 0.3s;
             display: block;
         }
+
         .role-card:hover {
             background: rgba(13,148,136,0.1);
             border-color: rgba(13,148,136,0.4);
             transform: translateY(-4px);
         }
+
         .role-icon {
-            font-size: 32px; margin-bottom: 14px;
-        }
-        .role-name {
-            font-size: 14px; font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .role-desc {
-            font-size: 12px; color: var(--text-muted); line-height: 1.5;
+            font-size: 32px;
+            margin-bottom: 14px;
         }
 
-        /* Features */
+        .role-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .role-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
         .features-section {
-            position: relative; z-index: 5;
+            position: relative;
+            z-index: 5;
             padding: 0 64px 80px;
             animation: fadeUp 0.8s 0.4s ease both;
         }
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            max-width: 1100px; margin: 0 auto;
+            max-width: 1100px;
+            margin: 0 auto;
         }
+
         .feature-card {
             background: rgba(17,34,64,0.5);
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 14px;
             padding: 28px;
         }
+
         .feature-icon {
-            width: 44px; height: 44px;
+            width: 44px;
+            height: 44px;
             background: rgba(13,148,136,0.15);
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; margin-bottom: 16px;
-        }
-        .feature-card h3 {
-            font-size: 16px; font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .feature-card p {
-            font-size: 13px; color: var(--text-muted); line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
         }
 
-        /* Footer */
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
         footer {
-            position: relative; z-index: 5;
+            position: relative;
+            z-index: 5;
             border-top: 1px solid rgba(255,255,255,0.06);
             padding: 28px 64px;
-            display: flex; justify-content: space-between; align-items: center;
-            color: var(--text-muted); font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 13px;
         }
-        footer a { color: var(--text-muted); text-decoration: none; }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
         footer a:hover { color: var(--white); }
+
+        @media (max-width: 1100px) {
+            nav {
+                padding: 22px 28px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .roles-grid,
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-strip {
+                flex-direction: column;
+            }
+
+            .stat-item {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .hero,
+            .roles-section,
+            .features-section {
+                padding-left: 22px;
+                padding-right: 22px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .roles-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-strip {
+                margin: 0 22px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 12px;
+                padding: 24px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
+
 <body>
+
 <div class="bg-layer"></div>
 <div class="grid-overlay"></div>
 
@@ -313,26 +463,32 @@
         <div class="logo-icon">✚</div>
         <div class="logo-text">Medi<span>Core</span></div>
     </div>
+
     <div class="nav-links">
-        <a href="#">Dashboard</a>
-        <a href="#">Departments</a>
-        <a href="#">Appointments</a>
-        <a href="#">Records</a>
-        <a href="#">Support</a>
+        <a href="/login">Dashboard</a>
+        <a href="#roles">Departments</a>
+        <a href="/login?role=patient">Appointments</a>
+        <a href="/login?role=patient">Records</a>
+        <a href="#support">Support</a>
     </div>
+
     <div class="nav-actions">
         <a href="/login" class="btn-outline">Log In</a>
-        <a href="/register" class="btn-primary">Register</a>
+        <a href="/patient/register" class="btn-primary">Register</a>
     </div>
 </nav>
 
 <section class="hero">
     <div class="hero-badge">Integrated Healthcare Platform</div>
     <h1>Modern Care,<br><em>Seamless Management</em></h1>
-    <p>A unified platform connecting doctors, nurses, patients, and staff — streamlining every aspect of hospital operations with precision and care.</p>
+    <p>
+        A unified platform connecting doctors, nurses, patients, and staff —
+        streamlining every aspect of hospital operations with precision and care.
+    </p>
+
     <div class="hero-ctas">
         <a href="/login" class="btn-primary">Access Portal →</a>
-        <a href="/register" class="btn-outline">Create Account</a>
+        <a href="/patient/register" class="btn-outline">Create Account</a>
     </div>
 </section>
 
@@ -341,50 +497,64 @@
         <div class="stat-num">24/7</div>
         <div class="stat-label">System Availability</div>
     </div>
+
     <div class="stat-item">
-        <div class="stat-num">5</div>
+        <div class="stat-num">6</div>
         <div class="stat-label">Role-Based Portals</div>
     </div>
+
     <div class="stat-item">
         <div class="stat-num">100%</div>
-        <div class="stat-label">Secure & Encrypted</div>
+        <div class="stat-label">Secure Access</div>
     </div>
+
     <div class="stat-item">
-        <div class="stat-num">Real‑Time</div>
-        <div class="stat-label">Record Updates</div>
+        <div class="stat-num">JSON</div>
+        <div class="stat-label">File-Based Storage</div>
     </div>
 </div>
 
-<section class="roles-section">
+<section class="roles-section" id="roles">
     <div class="section-header">
         <div class="section-label">Access Portals</div>
         <h2>Who Are You?</h2>
     </div>
+
     <div class="roles-grid">
         <a href="/login?role=admin" class="role-card">
             <div class="role-icon">🛡️</div>
             <div class="role-name">Admin</div>
-            <div class="role-desc">System oversight & configuration</div>
+            <div class="role-desc">Patients and staff management</div>
         </a>
+
         <a href="/login?role=doctor" class="role-card">
             <div class="role-icon">👨‍⚕️</div>
             <div class="role-name">Doctor</div>
-            <div class="role-desc">Patient care & clinical records</div>
+            <div class="role-desc">Records, medicine, schedules</div>
         </a>
+
         <a href="/login?role=nurse" class="role-card">
             <div class="role-icon">🩺</div>
             <div class="role-name">Nurse</div>
-            <div class="role-desc">Vitals, ward, and care management</div>
+            <div class="role-desc">Ward rooms and patient care</div>
         </a>
+
         <a href="/login?role=receptionist" class="role-card">
             <div class="role-icon">📋</div>
             <div class="role-name">Receptionist</div>
-            <div class="role-desc">Appointments & patient intake</div>
+            <div class="role-desc">Appointments and billing</div>
         </a>
+
+        <a href="/login?role=pharmacist" class="role-card">
+            <div class="role-icon">💊</div>
+            <div class="role-name">Pharmacist</div>
+            <div class="role-desc">Medicine orders and pharmacy</div>
+        </a>
+
         <a href="/login?role=patient" class="role-card">
             <div class="role-icon">🧑‍🤝‍🧑</div>
             <div class="role-name">Patient</div>
-            <div class="role-desc">View records & appointments</div>
+            <div class="role-desc">Records, appointments, bills</div>
         </a>
     </div>
 </section>
@@ -394,47 +564,54 @@
         <div class="section-label">Core Features</div>
         <h2>Everything in One Place</h2>
     </div>
+
     <div class="features-grid">
         <div class="feature-card">
             <div class="feature-icon">📅</div>
-            <h3>Smart Scheduling</h3>
-            <p>Automated appointment booking with conflict detection and instant confirmations for patients and doctors.</p>
+            <h3>Appointment Management</h3>
+            <p>Patients and receptionists can create and manage appointments, while doctors view schedules.</p>
         </div>
+
         <div class="feature-card">
             <div class="feature-icon">🗂️</div>
-            <h3>Electronic Health Records</h3>
-            <p>Secure, searchable patient histories, prescriptions, and lab results accessible in real time.</p>
+            <h3>Medical Records</h3>
+            <p>Doctors manage medical records, while patients securely view their own treatment history.</p>
         </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🏥</div>
+            <h3>Ward Management</h3>
+            <p>Nurses admit, update, and discharge patients from ward rooms with room status tracking.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">💳</div>
+            <h3>Billing & Payments</h3>
+            <p>Receptionists generate bills and patients view or mark payments using payment methods.</p>
+        </div>
+
         <div class="feature-card">
             <div class="feature-icon">💊</div>
-            <h3>Pharmacy & Billing</h3>
-            <p>Integrated drug dispensing, automated invoicing, and insurance claim processing on one platform.</p>
+            <h3>Medicine Management</h3>
+            <p>Doctors assign medicine, pharmacists view orders, and patients view prescribed medicine.</p>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3>Analytics Dashboard</h3>
-            <p>Live operational metrics, occupancy rates, and staff performance reports for administrators.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🔔</div>
-            <h3>Instant Notifications</h3>
-            <p>Real-time alerts for critical patient changes, appointment reminders, and urgent lab results.</p>
-        </div>
+
         <div class="feature-card">
             <div class="feature-icon">🔒</div>
             <h3>Role-Based Security</h3>
-            <p>Granular permissions ensuring every staff member only accesses information relevant to their role.</p>
+            <p>Each role sees only the dashboard and data relevant to their responsibilities.</p>
         </div>
     </div>
 </section>
 
-<footer>
-    <div>© 2025 MediCore Hospital Management System. All rights reserved.</div>
+<footer id="support">
+    <div>© 2026 MediCore Hospital Management System. All rights reserved.</div>
     <div style="display:flex;gap:24px;">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
-        <a href="#">Support</a>
+        <a href="/login">Support</a>
     </div>
 </footer>
+
 </body>
 </html>
