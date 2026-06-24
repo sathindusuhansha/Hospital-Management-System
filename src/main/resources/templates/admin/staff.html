@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MediCore | Staff Management</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --text: #102033;
+            --muted: #64748b;
+            --border: #dbe8ee;
+            --shadow: 0 18px 45px rgba(15,23,42,0.09);
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg,#eef6f8,#f8fbfd);
+            color: var(--text);
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 290px;
+            position: fixed;
+            min-height: 100vh;
+            padding: 26px 20px;
+            background: linear-gradient(180deg,#061724,#0b3043 55%,#0f4c5c);
+            color: white;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .brand-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg,#2dd4bf,#06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: #bae6fd;
+        }
+
+        .sidebar-section {
+            margin: 30px 0 12px;
+            padding-left: 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: #9bd6e6;
+            font-weight: 700;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 15px 16px;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            color: #dff7fb;
+            text-decoration: none;
+            font-weight: 650;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.14);
+        }
+
+        .sidebar-menu a,
+        .logout {
+            transition: 0.25s ease;
+        }
+
+        .logout:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateX(5px);
+            color: white;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 24px;
+        }
+
+        .mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .mini-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(204,251,241,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-profile span {
+            display: block;
+            font-size: 12px;
+            color: #bae6fd;
+            margin-top: 2px;
+        }
+
+        .main-content {
+            width: calc(100% - 290px);
+            margin-left: 290px;
+            padding: 34px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .page-label {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .topbar h1 {
+            margin: 8px 0;
+            font-size: 38px;
+            color: #0f172a;
+        }
+
+        .topbar p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 13px 16px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 25px;
+        }
+
+        .panel-header p {
+            margin: 7px 0 0;
+            color: var(--muted);
+        }
+
+        .form-grid {
+            margin-top: 22px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #dbe8ee;
+            background: #f8fafc;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg,#0f766e,#0f4c5c);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .table-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            gap: 15px;
+        }
+
+        .search-box {
+            width: 320px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 22px;
+            border: 1px solid #edf2f7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: #f1f8fb;
+        }
+
+        th {
+            padding: 17px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #475569;
+        }
+
+        td {
+            padding: 18px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+        }
+
+        tr:hover {
+            background: #f8fcfd;
+        }
+
+        .staff-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .id-pill {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .role-badge {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #dbeafe;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .edit-panel {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .edit-panel.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div>
+                <h2>MediCore</h2>
+                <p>Hospital Management</p>
+            </div>
+        </div>
+
+        <div class="sidebar-section">Admin Menu</div>
+
+        <nav class="sidebar-menu">
+            <a th:href="@{/admin/dashboard}">
+                <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+            </a>
+
+            <a th:href="@{/admin/patients}">
+                <i class="fa-solid fa-hospital-user"></i>
+                Patients
+            </a>
+
+            <a class="active" th:href="@{/admin/staff}">
+                <i class="fa-solid fa-users-gear"></i>
+                All Staff
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="mini-profile">
+                <div class="mini-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <strong>Admin</strong>
+                    <span>System Control</span>
+                </div>
+            </div>
+
+            <a class="logout" th:href="@{/logout}">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <span class="page-label">Staff Management</span>
+                <h1>Hospital Staff</h1>
+                <p>Add, view, edit, and delete doctor, nurse, receptionist, and pharmacist accounts.</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <strong>Administrator</strong><br>
+                    <span>System Control</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="content-grid">
+
+            <!-- CREATE STAFF FORM -->
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Add New Staff</h2>
+                    <p>Create a new hospital staff account.</p>
+                </div>
+
+                <form th:action="@{/admin/staff/add}" method="post" th:object="${staff}">
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" th:field="*{fullName}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" th:field="*{username}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" th:field="*{password}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" th:field="*{email}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" th:field="*{phone}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select th:field="*{role}" required>
+                                <option value="">Select Staff Role</option>
+                                <option value="DOCTOR">Doctor</option>
+                                <option value="NURSE">Nurse</option>
+                                <option value="RECEPTIONIST">Receptionist</option>
+                                <option value="PHARMACIST">Pharmacist</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" th:field="*{department}" placeholder="Example: Cardiology">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Specialization</label>
+                            <input type="text" th:field="*{specialization}" placeholder="Example: General Medicine">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Qualification</label>
+                            <input type="text" th:field="*{qualification}" placeholder="Example: MBBS / Diploma">
+                        </div>
+
+                        <button class="submit-btn" type="submit">
+                            <i class="fa-solid fa-user-plus"></i>
+                            Add Staff
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- READ STAFF TABLE -->
+            <div class="panel">
+
+                <div class="table-top">
+                    <div>
+                        <h2>Staff Records</h2>
+                        <p style="color:#64748b;">All registered hospital staff members.</p>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search staff...">
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Staff</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Phone</th>
+                            <th>Username</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="s : ${staffList}">
+                            <td>
+                                <span class="id-pill" th:text="${s.id}">STF-001</span>
+                            </td>
+
+                            <td>
+                                <div class="staff-cell">
+                                    <div class="avatar">
+                                        <i class="fa-solid fa-user-doctor"></i>
+                                    </div>
+
+                                    <div>
+                                        <strong th:text="${s.fullName}">Staff Name</strong><br>
+                                        <small th:text="${s.email}">staff@email.com</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="role-badge" th:text="${s.role}">DOCTOR</span>
+                            </td>
+
+                            <td th:text="${s.department}">Department</td>
+                            <td th:text="${s.phone}">Phone</td>
+                            <td th:text="${s.username}">Username</td>
+
+                            <td>
+                                <div class="action-buttons">
+
+                                    <button type="button"
+                                            class="edit-btn"
+                                            th:attr="
+                                                data-id=${s.id},
+                                                data-fullname=${s.fullName},
+                                                data-username=${s.username},
+                                                data-password=${s.password},
+                                                data-email=${s.email},
+                                                data-phone=${s.phone},
+                                                data-role=${s.role},
+                                                data-department=${s.department},
+                                                data-specialization=${s.specialization},
+                                                data-qualification=${s.qualification}"
+                                            onclick="openEditForm(this)">
+                                        Edit
+                                    </button>
+
+                                    <a class="delete-btn"
+                                       th:href="@{'/admin/staff/delete/' + ${s.id}}"
+                                       onclick="return confirm('Are you sure you want to delete this staff member?');">
+                                        Delete
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(staffList)}">
+                            <td colspan="7" class="empty-state">
+                                <i class="fa-solid fa-users-gear"></i>
+                                <h3>No Staff Found</h3>
+                                <p style="color:#64748b;">Staff records will appear here after adding.</p>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- UPDATE STAFF FORM -->
+                <div id="editPanel" class="panel edit-panel">
+
+                    <div class="panel-header">
+                        <h2>Edit Staff Member</h2>
+                        <p>Update selected staff account details.</p>
+                    </div>
+
+                    <form th:action="@{/admin/staff/update}" method="post">
+
+                        <div class="form-grid">
+
+                            <input type="hidden" id="editId" name="id">
+
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="editFullName" name="fullName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="editUsername" name="username" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="text" id="editPassword" name="password" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="editEmail" name="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="editPhone" name="phone">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select id="editRole" name="role" required>
+                                    <option value="">Select Staff Role</option>
+                                    <option value="DOCTOR">Doctor</option>
+                                    <option value="NURSE">Nurse</option>
+                                    <option value="RECEPTIONIST">Receptionist</option>
+                                    <option value="PHARMACIST">Pharmacist</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Department</label>
+                                <input type="text" id="editDepartment" name="department">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Specialization</label>
+                                <input type="text" id="editSpecialization" name="specialization">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Qualification</label>
+                                <input type="text" id="editQualification" name="qualification">
+                            </div>
+
+                            <button class="submit-btn" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Save Staff Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    function openEditForm(button) {
+        document.getElementById("editPanel").classList.add("active");
+
+        document.getElementById("editId").value = button.dataset.id || "";
+        document.getElementById("editFullName").value = button.dataset.fullname || "";
+        document.getElementById("editUsername").value = button.dataset.username || "";
+        document.getElementById("editPassword").value = button.dataset.password || "";
+        document.getElementById("editEmail").value = button.dataset.email || "";
+        document.getElementById("editPhone").value = button.dataset.phone || "";
+        document.getElementById("editRole").value = button.dataset.role || "";
+        document.getElementById("editDepartment").value = button.dataset.department || "";
+        document.getElementById("editSpecialization").value = button.dataset.specialization || "";
+        document.getElementById("editQualification").value = button.dataset.qualification || "";
+
+        document.getElementById("editPanel").scrollIntoView({ behavior: "smooth" });
+    }
+</script>
+
+</body>
+</html>
